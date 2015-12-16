@@ -1,0 +1,26 @@
+{
+  "name": "user-agent-device-mapper",
+  "version": "0.0.1",
+  "description": "Map user agents to desktop, mobile or tablet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/divvit/user-agent-device-mapper.git"
+  },
+  "keywords": [
+    "user-agent",
+    "mobile"
+  ],
+  "author": "Nino Ulsamer <nino@divvit.com> (http://www.divvit.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/divvit/user-agent-device-mapper/issues"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  }
+}
