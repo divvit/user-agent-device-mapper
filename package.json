@@ -1,6 +1,6 @@
 {
-  "name": "user-agent-device-mapper",
-  "version": "0.0.1",
+  "name": "@divvit/user-agent-device-mapper",
+  "version": "1.0.0",
   "description": "Map user agents to desktop, mobile or tablet.",
   "main": "index.js",
   "scripts": {
