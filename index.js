@@ -125,7 +125,7 @@ module.exports = {
       if (!userAgentCache[userAgent]) {
 
          // check for tablet first
-         bTabletFound = false;
+         var bTabletFound = false;
          tabletRegex.forEach(function(pattern) {
             if (!bTabletFound && pattern.test(userAgent))
                bTabletFound = true;

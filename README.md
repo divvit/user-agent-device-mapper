@@ -27,4 +27,4 @@ Nino Ulsamer, Divvit AB
 
 * 0.0.1 Initial release
 * 1.0.0 Migrated to divvit organization
-
+* 1.0.1 Fixed global variable leak
