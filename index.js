@@ -1,3 +1,9 @@
+const crypto = require('crypto');
+const LRU = require('lru-cache');
+
+// Max number of elements allowed in the cache.
+const CACHE_SIZE = 10000;
+
 var tabletUserAgents = {
    "iPad": "iPad|iPad.*Mobile",
    "NexusTablet": "Android.*Nexus[\\s]+(7|9|10)|^.*Android.*Nexus(?:(?!Mobile).)*$",
@@ -116,14 +122,17 @@ Object.keys(tabletUserAgents).forEach(function(k) {
    tabletRegex.push(new RegExp(tabletUserAgents[k], 'i'));
 });
 
-var userAgentCache = {};
-
+var userAgentCache = new LRU({max: CACHE_SIZE});
 module.exports = {
 
    // https://developer.mozilla.org/en-US/docs/Browser_detection_using_the_user_agent
    getDeviceType: function(userAgent) {
-      if (!userAgentCache[userAgent]) {
-
+      if(!userAgent || userAgent === ''){
+         return 'desktop';
+      }
+      var uaHash = getUserAgentHash(userAgent);
+      var value = userAgentCache.get(uaHash);
+      if (!value) {
          // check for tablet first
          var bTabletFound = false;
          tabletRegex.forEach(function(pattern) {
@@ -132,17 +141,37 @@ module.exports = {
          });
 
          if (bTabletFound) {
-            userAgentCache[userAgent] = 'tablet'
+            value = 'tablet'
          } else {
             // keep searching for more
             if (/mobi/i.test(userAgent)) {
-               userAgentCache[userAgent] = 'mobile';
+               value = 'mobile';
             } else {
-               userAgentCache[userAgent] = 'desktop';
+               value = 'desktop';
             }
          }
+         //Update cache.
+         userAgentCache.set(uaHash, value);
       }
 
-      return userAgentCache[userAgent];
-   }
+      return value;
+   },
+
+   //Used only for test purposes
+   _getCacheSize: function(){
+      return userAgentCache.length;
+   },
+
+   //Used only for test purposes
+   _getElemFromCache: function(userAgent){
+      return userAgentCache.get(getUserAgentHash(userAgent));
+   },
+   
+   _getCacheMaxSize: function(userAgent){
+      return CACHE_SIZE;
+   },
 };
+
+function getUserAgentHash(userAgent) {
+   return crypto.createHash('md5').update(userAgent).digest("hex");
+}

@@ -1,6 +1,6 @@
 {
   "name": "@divvit/user-agent-device-mapper",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Map user agents to desktop, mobile or tablet.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "lru-cache":"4.0.1"
   }
 }

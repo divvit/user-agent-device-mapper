@@ -42,4 +42,44 @@ describe('#getDeviceType', function() {
       getDeviceType('mozilla/5.0_(linux;_u;_android_3.1;_en-us;_gt-p7510_build/hmj37)_applewebkit/534.13_(khtml,_like_gecko)_version/4.0_safari/534.13')
          .should.equal('tablet');
    });
+
+   it('Ensure cache is being used for tablet', function() {
+      const ua = 'mozilla/5.0_(linux;_u;_android_3.1;_en-us;_gt-p7510_build/hmj37)_applewebkit/534.13_(khtml,_like_gecko)_version/4.0_safari/534.13';
+      getDeviceType(ua).should.equal('tablet');
+      userAgentMapper._getElemFromCache(ua).should.equal('tablet');
+   });
+
+   it('Ensure cache is being used for mobile', function() {
+      const ua = 'Mozilla/5.0 (BlackBerry; U; BlackBerry 9850; en-US) AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.254 Mobile Safari/534.11+';
+      getDeviceType(ua).should.equal('mobile');
+      userAgentMapper._getElemFromCache(ua).should.equal('mobile');
+   });
+
+   it('Ensure cache is being used for desktop', function() {
+      const ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36';
+      getDeviceType(ua).should.equal('desktop');
+      userAgentMapper._getElemFromCache(ua).should.equal('desktop');
+   });
+
+   it('Ensure cache is size is limited', function () {
+      this.timeout(5000);
+      const cacheMaxSize = userAgentMapper._getCacheMaxSize()
+      for (var i = 0; i < cacheMaxSize * 2; i++) {
+         getDeviceType(i + ' Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36');
+      }
+      userAgentMapper._getCacheSize().should.equal(cacheMaxSize);
+   });
+
+   it('Undefined UA should return desktop.', function() {
+      getDeviceType(undefined)
+         .should.equal('desktop');
+   });
+   it('Null UA should return desktop.', function() {
+      getDeviceType(null)
+         .should.equal('desktop');
+   });
+   it('Empty UA should return desktop.', function() {
+      getDeviceType('')
+         .should.equal('desktop');
+   });
 });
